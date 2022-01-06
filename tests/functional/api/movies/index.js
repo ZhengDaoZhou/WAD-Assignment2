@@ -44,8 +44,8 @@ describe("Movies endpoint", () => {
         .expect("Content-Type", /json/)
         .expect(200)
         .end((err, res) => {
-          expect(res.body).to.be.a("array");
-          expect(res.body.length).to.equal(20);
+          expect(res.body.results).to.be.a("array");
+          expect(res.body.results.length).to.equal(10);
           done();
         });
     });
@@ -77,5 +77,86 @@ describe("Movies endpoint", () => {
           });
       });
     });
+  });
+
+  describe("GET /api/movies/tmdb/upcoming/:page ", () => {
+    let page1;
+    it("should return 20 movies and a status 200", (done) => {
+      request(api)
+        .get("/api/movies/tmdb/upcoming/1")
+        .set("Accept", "application/json")
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body.results).to.be.a("array");
+          expect(res.body.results.length).to.equal(20);
+          page1 = res.body.results[0];
+          done();
+        });
+    });
+    it("should return different movies when page changed", () => {
+        return request(api)
+          .get(`/api/movies/tmdb/upcoming/2`)
+          .set("Accept", "application/json")
+          .expect("Content-Type", /json/)
+          .expect(200)
+          .then((res) => {
+            expect(res.body.results[0]).to.not.have.property("title", page1.title);
+          });
+      });
+  });
+
+  describe("GET /api/movies/tmdb/topRated/:page ", () => {
+    let page1;
+    it("should return 20 movies and a status 200", (done) => {
+      request(api)
+        .get("/api/movies/tmdb/topRated/1")
+        .set("Accept", "application/json")
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body.results).to.be.a("array");
+          expect(res.body.results.length).to.equal(20);
+          page1 = res.body.results[0];
+          done();
+        });
+    });
+    it("should return different movies when page changed", () => {
+        return request(api)
+          .get(`/api/movies/tmdb/topRated/2`)
+          .set("Accept", "application/json")
+          .expect("Content-Type", /json/)
+          .expect(200)
+          .then((res) => {
+            expect(res.body.results[0]).to.not.have.property("title", page1.title);
+          });
+      });
+  });
+
+  describe("GET /api/movies/tmdb/popular/:page ", () => {
+    let page1;
+    it("should return 20 movies and a status 200", (done) => {
+      request(api)
+        .get("/api/movies/tmdb/popular/1")
+        .set("Accept", "application/json")
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body.results).to.be.a("array");
+          expect(res.body.results.length).to.equal(20);
+          page1 = res.body.results[0];
+          done();
+        });
+    });
+    it("should return different movies when page changed", () => {
+        return request(api)
+          .get(`/api/movies/tmdb/popular/2`)
+          .set("Accept", "application/json")
+          .expect("Content-Type", /json/)
+          .expect(200)
+          .then((res) => {
+            expect(res.body.results[0]).to.not.have.property("title", page1.title);
+          });
+      });
   });
 });
