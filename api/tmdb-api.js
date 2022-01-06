@@ -1,15 +1,15 @@
 import fetch from 'node-fetch';
 
-export const getUpcomingMovies = () => {
+export const getUpcomingMovies = (args) => {
     return fetch(
-        `https://api.themoviedb.org/3/movie/upcoming?api_key=${process.env.TMDB_KEY}&language=en-US&page=1`
+      `https://api.themoviedb.org/3/movie/upcoming?api_key=${process.env.TMDB_KEY}&language=en-US&page=${args}`
     ).then((response) => {
-        if (!response.ok) {
-            throw new Error(response.json().message);
-        }
-        return response.json();
+      if (!response.ok) {
+        throw new Error(response.json().message);
+      }
+      return response.json();
     })
-        .catch((error) => {
-            throw error
-        });
-};
+    .catch((error) => {
+        throw error
+    });
+  };
